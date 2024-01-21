@@ -1,4 +1,5 @@
 # Licpl-Censor
+## [German Version](README.de.md)
 Licpl-Censor is a tool designed to censor faces and license plates in videos. It's currently under active development, so expect frequent updates and potential bugs.
 
 ## Limitations
