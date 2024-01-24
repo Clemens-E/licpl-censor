@@ -1,14 +1,14 @@
 import os
 import cv2
 import imageio
-from numpy import argsort
-from tqdm import tqdm
+import tqdm
 from detection import getDetectionsBasedOnArgs
-from subprocess import DEVNULL, STDOUT, check_call
+from subprocess import DEVNULL, check_call
 
 from helpers import getFrameCount, getFramesBufferMaxLength
 
-def blurAndWriteFrames(detections, annotator, inputPath, outputPath):
+
+def blurAndWriteFrames(detections, annotator, inputPath, outputPath, tqdm=tqdm):
     if (os.path.isfile(outputPath)):
         print(f"output video {outputPath} already exists, removing")
         os.remove(outputPath)
@@ -36,7 +36,7 @@ def blurAndWriteFrames(detections, annotator, inputPath, outputPath):
                 pbar.update(1)
 
 
-def extractAndAddAudio(inputPath, outputPath):
+def extractAndAddAudio(inputPath, outputPath, log=print):
     outputPathBase = os.path.dirname(outputPath)
     tmpAudio = os.path.join(outputPathBase, f"{os.urandom(8).hex()}.aac")
     tmpVideo = os.path.join(outputPathBase, f"{os.urandom(8).hex()}.mp4")
@@ -46,7 +46,7 @@ def extractAndAddAudio(inputPath, outputPath):
             stdout=DEVNULL,
             stderr=DEVNULL,
         )
-        print(f"adding audio to output video")
+        log(f"adding audio to output video")
         check_call(
             [
                 "ffmpeg", "-i", tmpAudio, "-i", outputPath, "-c:v", "copy",
@@ -59,13 +59,13 @@ def extractAndAddAudio(inputPath, outputPath):
         os.remove(outputPath)
         os.rename(tmpVideo, outputPath)
     except Exception as e:
-        print(f"An error occurred while adding audio to the output video")
-        print(f"leaving video without audio")
+        log(f"An error occurred while adding audio to the output video")
+        log(f"leaving video without audio")
         if os.path.isfile(tmpAudio):
             os.remove(tmpAudio)
 
 
-def readVideoGetDetections(inputPath, yol, args):
+def readVideoGetDetections(inputPath, yol, args, tqdm=tqdm):
     frameCount = getFrameCount(inputPath)
     videoReader = imageio.imiter(inputPath)
     count = 0
@@ -92,4 +92,5 @@ def readVideoGetDetections(inputPath, yol, args):
                                          frames=framesBuffer,
                                          args=args))
             pbar.update(len(framesBuffer))
+
     return processedFrames

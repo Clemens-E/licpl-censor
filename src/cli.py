@@ -1,18 +1,18 @@
-import glob
 from args import getParsedArgs
-from helpers import applyFrameMemory
-from video_processing import blurAndWriteFrames, extractAndAddAudio, readVideoGetDetections
 
 args = getParsedArgs()
-import os
 
+import os
+from helpers import applyFrameMemory
+from video_processing import blurAndWriteFrames, extractAndAddAudio, readVideoGetDetections
+import glob
 from ultralytics import YOLO
 from torch import cuda
 
 print(f"using {'cuda' if cuda.is_available() else 'cpu'} for detection")
 import supervision as sv
 from effects.blur import BlurAnnotator
-import pickle
+
 video_extensions = ['.mp4', '.avi', '.mov', '.mkv', '.flv', '.wmv']
 
 inputFiles = []
@@ -23,9 +23,12 @@ elif os.path.isdir(args.input):
     for file in glob.glob(os.path.join(args.input, "**"), recursive=True):
         inputFiles.append(file)
 else:
-    print(f"input {args.input} is not a file or directory")       
+    print(f"input {args.input} is not a file or directory")
 
-inputFiles = [file for file in inputFiles if os.path.splitext(file)[1].lower() in video_extensions]
+inputFiles = [
+    file for file in inputFiles
+    if os.path.splitext(file)[1].lower() in video_extensions
+]
 isBatch = len(inputFiles) > 1
 print(f"found {len(inputFiles)} video files")
 
@@ -44,9 +47,11 @@ for inputPath in inputFiles:
     outputPath = os.path.join(args.output, f"{inputName}_blurred.mp4")
 
     if not args.flat_output and isBatch:
-        inputPathWithoutSrc = os.path.dirname( os.path.relpath(inputPath, args.input))
-        
-        outputPath = os.path.join(args.output, inputPathWithoutSrc, f"{inputName}_blurred.mp4")
+        inputPathWithoutSrc = os.path.dirname(
+            os.path.relpath(inputPath, args.input))
+
+        outputPath = os.path.join(args.output, inputPathWithoutSrc,
+                                  f"{inputName}_blurred.mp4")
 
     os.makedirs(os.path.dirname(outputPath), exist_ok=True)
 
@@ -64,5 +69,5 @@ for inputPath in inputFiles:
     blurAndWriteFrames(detections,
                        sv.BoxAnnotator() if args.no_blur else BlurAnnotator(),
                        inputPath, outputPath)
-    
+
     extractAndAddAudio(inputPath, outputPath)

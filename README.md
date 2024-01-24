@@ -1,5 +1,5 @@
 # Licpl-Censor
-## [German Version](README.de.md)
+## [Deutsches Readme](README.de.md)
 Licpl-Censor is a tool designed to censor faces and license plates in videos. It's currently under active development, so expect frequent updates and potential bugs.
 
 ## Limitations
@@ -22,12 +22,12 @@ The easiest way to get started is by using the Docker image, which includes all 
 You can then run the tool with the following command:
 
 ```bash
-python src/main.py --input /app/data/your-input/ --output /app/data/your-output/ --model /app/data/model.pt
+python src/cli.py --input /app/data/your-input/ --output /app/data/your-output/ --model /app/data/model.pt
 ```
 
 The tool will attempt to replicate the folder structure of your input folder in the output folder. If this is not desired or fails, you can use the `--flat--output` flag to disable this behavior.
 
-To view all available options, run `python src/main.py --help``.
+To view all available options, run `python src/cli.py --help``.
 
 ## Getting the Model
 New models will be released as they become available. These "small" models offer a good balance between speed and accuracy. Larger models are also in development but are not currently available for release.

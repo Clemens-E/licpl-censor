@@ -1,6 +1,5 @@
 import threading
 from ultralytics import YOLO
-from args import getParsedArgs
 import supervision as sv
 import numpy as np
 
@@ -53,10 +52,7 @@ def resize_boxes(boxes: np.ndarray, scale_factor: float) -> np.ndarray:
     return new_boxes
 
 
-args = getParsedArgs()
-
-
-def thread_detectFrames(frames, sem, results):
+def thread_detectFrames(frames, sem, results, args):
     model = YOLO(model=args.model)
     processedFrames = []
     for frame in frames:
