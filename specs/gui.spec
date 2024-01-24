@@ -29,7 +29,6 @@ exe = EXE(
     upx_exclude=[],
     runtime_tmpdir=None,
     console=True,
-    splash_file="..\\43886026.jpg",
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
