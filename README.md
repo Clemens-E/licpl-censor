@@ -12,8 +12,20 @@ The dataset is continuously updated and improved. However, not all camera types 
 Please note that the model may miss instances, requiring manual review of the output. Nonetheless, it significantly reduces the time compared to manual censoring.
 
 ## Installation
+### Standalone Executable (Windows only)
+There is a standalone executable available for Windows.
+It includes all required dependencies and NVIDIA CUDA support.
+You *might* have to install [ffmpeg](https://community.chocolatey.org/packages/ffmpeg) manually if it's not already installed on your system, or if the tool can't find it.
+
+The standalone executable is *not* available in the releases, for the simple reason that it's too large to upload to GitHub.
+Download links are attached to the release notes.
+
+There exists a cli and a gui version, the cli version has all features, while the gui version is more user-friendly.
+
+__Heads up:__ When opening the standalone executable, it will extract the files to a temporary directory. This might take a few seconds or even minutes, depending on your system.
+
+
 ### Docker
-The easiest way to get started is by using the Docker image, which includes all necessary dependencies.
 
 1. Clone the repository.
 2. Run `docker build -t licpl-censor .` in the root directory.

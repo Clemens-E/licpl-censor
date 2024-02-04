@@ -11,8 +11,21 @@ Das Datenset wird kontinuierlich aktualisiert und verbessert. Nicht alle Kamerat
 Bitte beachten Sie, dass das Modell möglicherweise Instanzen übersehen kann, was eine manuelle Überprüfung der Ausgabe erforderlich macht. Dennoch reduziert es die Zeit erheblich im Vergleich zur manuellen Zensur.
 
 ## Installation
+
+### Eigenständige ausführbare Datei (nur Windows)
+Für Windows ist eine eigenständige ausführbare Datei verfügbar.
+Es umfasst alle erforderlichen Abhängigkeiten und NVIDIA CUDA-Unterstützung.
+Möglicherweise müssen Sie [ffmpeg](https://community.chocolatey.org/packages/ffmpeg) manuell installieren, wenn es noch nicht auf Ihrem System installiert ist oder das Tool es nicht finden kann.
+
+Die eigenständige ausführbare Datei ist in den Github Releases *nicht* verfügbar, aus dem einfachen Grund, dass sie zu groß ist, um sie auf GitHub hochzuladen.
+Download-Links sind den Release Notes beigefügt.
+
+Es gibt eine CLI- und eine GUI-Version. Die CLI-Version verfügt über alle Funktionen, während die GUI-Version benutzerfreundlicher ist.
+
+__Hinweis:__ Beim Öffnen der eigenständigen ausführbaren Datei werden die Dateien in ein temporäres Verzeichnis extrahiert. Dies kann je nach System einige Sekunden oder sogar Minuten dauern.
+
 ### Docker
-Der einfachste Weg, um loszulegen, besteht darin, das Docker-Image zu verwenden, das alle erforderlichen Abhängigkeiten enthält.
+
 
 1. Klone das Repository.
 2. Führe `docker build -t licpl-censor .` im Stammverzeichnis aus.
