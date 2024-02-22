@@ -68,6 +68,6 @@ for inputPath in inputFiles:
 
     blurAndWriteFrames(detections,
                        sv.BoxAnnotator() if args.no_blur else BlurAnnotator(),
-                       inputPath, outputPath)
+                       inputPath, outputPath, args)
 
     extractAndAddAudio(inputPath, outputPath)

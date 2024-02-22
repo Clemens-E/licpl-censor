@@ -1,25 +1,34 @@
 import os
 import cv2
 import imageio
-import tqdm
+from tqdm import tqdm
 from detection import getDetectionsBasedOnArgs
 from subprocess import DEVNULL, check_call
 
 from helpers import getFrameCount, getFramesBufferMaxLength
 
 
-def blurAndWriteFrames(detections, annotator, inputPath, outputPath, tqdm=tqdm):
+def blurAndWriteFrames(detections,
+                       annotator,
+                       inputPath,
+                       outputPath,
+                       args,
+                       tqdm=tqdm):
     if (os.path.isfile(outputPath)):
         print(f"output video {outputPath} already exists, removing")
         os.remove(outputPath)
 
-    originalCodec = imageio.get_reader(inputPath).get_meta_data()["codec"]
-    originalFps = imageio.get_reader(inputPath).get_meta_data()["fps"]
+    tmpReader = imageio.get_reader(inputPath)
+    metaData = tmpReader.get_meta_data()
+    originalFps = metaData["fps"]
     frameCount = getFrameCount(inputPath)
 
+    tmpReader.close()
+
     with imageio.get_writer(outputPath,
-                            codec=originalCodec,
+                            codec="libx264",
                             macro_block_size=None,
+                            quality=args.quality,
                             fps=originalFps) as writer:
 
         videoReader = imageio.imiter(inputPath)

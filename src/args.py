@@ -43,6 +43,13 @@ parser.add_argument("--threads",
                     help="select number of threads, use with --multi",
                     default=floor(16 / 2))
 
+parser.add_argument(
+    "--quality",
+    type=int,
+    help=
+    "quality range from 0 to 10, see https://imageio.readthedocs.io/en/stable/_autosummary/imageio.plugins.ffmpeg.html#parameters-for-writing",
+    default=6)
+
 parser.add_argument("--save-training",
                     help="save frames with low confidence for training",
                     default=False)
@@ -57,8 +64,10 @@ parser.add_argument("--flat-output",
                     help="dont replicate the input folder structure",
                     default=False)
 
+
 def getDummyArgs():
     return parser.parse_args(["--input", "input", "--output", "output"])
+
 
 def getParsedArgs():
     argsObj = parser.parse_args()

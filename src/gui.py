@@ -6,6 +6,7 @@ from customtkinter import filedialog
 import customtkinter as ct
 from tqdm.tk import tqdm
 import threading
+from PIL import Image
 
 ct.set_appearance_mode("System")  # Modes: system (default), light, dark
 ct.set_default_color_theme("dark-blue")
@@ -152,6 +153,7 @@ def runDetection():
                            BlurAnnotator(),
                            inputPath,
                            outputPath,
+                           getDummyArgs(),
                            tqdm=tqdm_)
 
         extractAndAddAudio(inputPath,
