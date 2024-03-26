@@ -1,7 +1,7 @@
 supervision
 imageio[ffmpeg]
 tqdm
-ultralytics
+ultralytics>=8.1.34
 Pillow
 customtkinter
 numpy

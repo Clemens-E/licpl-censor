@@ -2,7 +2,7 @@ from PyInstaller.utils.hooks import collect_data_files
 import ultralytics
 ultra_files = collect_data_files('ultralytics')
 a = Analysis(
-    ['src\\cli.py'],
+    ['..\\src\\cli.py'],
     pathex=[],
     binaries=[],
     datas=ultra_files,
