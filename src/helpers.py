@@ -26,9 +26,7 @@ def getFrameCount(inputFile):
 def applyFrameMemory(detections: list[sv.Detections], memorySize: int):
     memoryFrames = []
     for index in range(len(detections)):
-        mergedDetections = sv.Detections.empty()
-        mergedDetections = sv.Detections.merge(
-            [mergedDetections, detections[index]])
+        mergedDetections = detections[index]
 
         for value2 in detections[index - memorySize:index + memorySize]:
             mergedDetections = sv.Detections.merge([mergedDetections, value2])
