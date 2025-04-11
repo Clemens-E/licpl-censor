@@ -1,6 +1,5 @@
-
 # Copied from https://github.com/roboflow/supervision/blob/develop/supervision/annotators/core.py
-# slightly modified 
+# significantly modified 
 import numpy as np
 import cv2
 import math
@@ -33,6 +32,15 @@ class BlurAnnotator():
     A class for blurring regions in an image using provided detections.
     """
 
+    def __init__(self, blur_strength=30):
+        """
+        Initialize the blur annotator with customizable blur strength.
+        
+        Args:
+            blur_strength (int): Controls the strength of the Gaussian blur.
+                                Higher values create a stronger blur effect.
+        """
+        self.blur_strength = blur_strength
 
     def annotate(
         self,
@@ -53,7 +61,7 @@ class BlurAnnotator():
             ```python
             >>> import supervision as sv
 
-            >>> image = ...
+            >>> image = ...F
             >>> detections = sv.Detections(...)
 
             >>> blur_annotator = sv.BlurAnnotator()
@@ -62,9 +70,6 @@ class BlurAnnotator():
             ...     detections=detections
             ... )
             ```
-
-        ![blur-annotator-example](https://media.roboflow.com/
-        supervision-annotator-examples/blur-annotator-example-purple.png)
         """
         image_height, image_width = scene.shape[:2]
         clipped_xyxy = clip_boxes(
@@ -72,15 +77,32 @@ class BlurAnnotator():
         ).astype(int)
 
         for x1, y1, x2, y2 in clipped_xyxy:
-            
             roi = scene[y1:y2, x1:x2]
-            kernel_size = max(1, math.floor(min(y2 -y1, x2 - x1) / 2))
             
-            # make sure kernel size is odd
-            if kernel_size % 2 == 0:
-                kernel_size += 1
-
-            roi = cv2.medianBlur(roi, kernel_size)
+            # Skip if ROI is empty
+            if roi.size == 0:
+                continue
+                
+            # Calculate kernel size based on region dimensions
+            # but with a more moderate scaling for stability
+            region_size = min(y2 - y1, x2 - x1)
+            
+            # Use a two-step blur for smoother results
+            # First, a small box blur to reduce noise
+            roi = cv2.boxFilter(roi, -1, (5, 5))
+            
+            # Then apply a Gaussian blur with size proportional to region
+            # but capped to avoid excessive blurring
+            blur_size = max(5, min(99, region_size // 3))
+            # Ensure blur size is odd
+            if blur_size % 2 == 0:
+                blur_size += 1
+                
+            # Apply Gaussian blur with consistent sigma value for smoother effect
+            sigma = self.blur_strength
+            roi = cv2.GaussianBlur(roi, (blur_size, blur_size), sigma)
+            
+            # Apply the blurred region back to the image
             scene[y1:y2, x1:x2] = roi
 
         return scene

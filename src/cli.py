@@ -3,7 +3,7 @@ from args import getParsedArgs
 args = getParsedArgs()
 
 import os
-from helpers import applyFrameMemory
+from helpers import applyFrameMemory, calculate_average_confidence
 from video_processing import blurAndWriteFrames, extractAndAddAudio, readVideoGetDetections
 import glob
 from ultralytics import YOLO
@@ -62,9 +62,14 @@ for inputPath in inputFiles:
     model = YOLO(model=args.model)
     detections = readVideoGetDetections(inputPath, model, args)
 
+    print(
+        f"average confidence: {calculate_average_confidence(detections):.2f}")
+
     #detections = pickle.load(open("detections.pkl", "rb"))
     if (args.frame_memory > 0):
         detections = applyFrameMemory(detections, args.frame_memory)
+
+    print("detection finished")
 
     blurAndWriteFrames(detections,
                        sv.BoxAnnotator() if args.no_blur else BlurAnnotator(),

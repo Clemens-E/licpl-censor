@@ -4,7 +4,7 @@ import imageio
 from tqdm import tqdm
 from detection import getDetectionsBasedOnArgs
 from subprocess import DEVNULL, check_call
-
+import supervision as sv
 from helpers import getFrameCount, getFramesBufferMaxLength
 
 
@@ -74,7 +74,7 @@ def extractAndAddAudio(inputPath, outputPath, log=print):
             os.remove(tmpAudio)
 
 
-def readVideoGetDetections(inputPath, yol, args, tqdm=tqdm):
+def readVideoGetDetections(inputPath, yol, args, tqdm=tqdm) -> list[sv.Detections]:
     frameCount = getFrameCount(inputPath)
     videoReader = imageio.imiter(inputPath)
     count = 0
